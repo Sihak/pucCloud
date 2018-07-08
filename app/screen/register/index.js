@@ -12,25 +12,31 @@ const academicProgram = {
     nameShow: 'Academic Program',
     name: 'academic-program',
 }
-@inject('gridButtons','auth', 'cNavigation')
+@inject('gridButtons', 'auth', 'cNavigation', 'admission')
 @observer
 class RegisterScreen extends Component {
 
-  async onRegister(item) {
+    componentDidMount() {
+        this.props.admission.fetchPrograms();
+    }
+
+    async onRegister(item) {
+        console.log(item)
         if (!this.props.auth.user) {
-            await this.props.cNavigation.getGridButtonInfo(item.nameShow,item.name,item.icon,item.color);
+            await this.props.cNavigation.getGridButtonInfo(item.institute.shortName, item.institute.name, item.institute.icon, item.color);
             await this.props.auth.setFromMe(false);
             this.props.navigation.navigate('LoginSignUp');
         }
         else {
-            await this.props.cNavigation.getGridButtonInfo(item.nameShow,item.name,item.icon,item.color);
+            await this.props.cNavigation.getGridButtonInfo(item.institute.shortName, item.institute.name, item.institute.icon, item.color);
             await this.props.auth.setFromMe(false);
             this.props.navigation.navigate('Form')
         }
     }
 
     render() {
-        const { gridButtons, loading } = this.props.gridButtons;
+        const { programs, loading } = this.props.admission;
+        console.log(programs)
         return (
             <SafeAreaView style={styles.container}>
                 <ScrollView style={styles.container}>
@@ -40,27 +46,28 @@ class RegisterScreen extends Component {
                     </View>
                     <View style={styles.body}>
                         <FlatList
-                            ListHeaderComponent={() => {
-                                return (
-                                    <TouchableOpacity
-                                        onPress={() => this.onRegister(academicProgram)}
-                                        style={styles.academicButton}>
-                                        <View style={[styles.academicIconContainer, APPEARANCES.SHADOW]}>
-                                            <Image style={styles.academicIcon} source={require('../../asset/image/academic-program.png')} />
-                                        </View>
-                                        <Text style={styles.buttonText}>{'Academic Program'}</Text>
-                                    </TouchableOpacity>
-                                )
-                            }}
+                            // ListHeaderComponent={() => {
+                            //     return (
+                            //         <TouchableOpacity
+                            //             onPress={() => this.onRegister(academicProgram)}
+                            //             style={styles.academicButton}>
+                            //             <View style={[styles.academicIconContainer, APPEARANCES.SHADOW]}>
+                            //                 <Image style={styles.academicIcon} source={require('../../asset/image/academic-program.png')} />
+                            //             </View>
+                            //             <Text style={styles.buttonText}>{'Academic Program'}</Text>
+                            //         </TouchableOpacity>
+                            //     )
+                            // }}
                             numColumns={2}
-                            data={gridButtons}
+                            data={programs}
                             style={styles.gridMenu}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({ item }) => {
-                                return( <GridMenu 
-                                    item = {item}
-                                    onButton = {(value) => this.onRegister(value)}
-                                /> )
+                                return (<GridMenu
+                                    onButton={()=>this.onRegister(item)}
+                                    program={item.institute}
+                                    name={item.institute.shortName}
+                                />)
                             }}
                         />
                     </View>

@@ -1,62 +1,22 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
-import { DIMENSION, APPEARANCES } from '../../module';
+import { DIMENSION, APPEARANCES, COLORS } from '../../module';
 class GridMenu extends Component {
-    switchButton(item) {
-        switch (item.name) {
-            case 'thai-program':
-                return (
-                    <TouchableOpacity
-                        onPress={() => this.props.onButton(this.props.item)}
-                        style={styles.gridButton}>
-                        <View style={[styles.gridIconContainer, APPEARANCES.SHADOW, { backgroundColor: this.props.item.color }]}> */}
-                    <Image style={styles.buttonIcon} source={require('../../asset/image/thai-program.png')} />
-                        </View>
-                        <Text style={styles.buttonText}>{this.props.item.nameShow}</Text>
-                    </TouchableOpacity>
-                )
-                break;
-            case 'english-program':
-                return (
-                    <TouchableOpacity
-                        onPress={() => this.props.onButton(this.props.item)}
-                        style={styles.gridButton}>
-                        <View style={[styles.gridIconContainer, APPEARANCES.SHADOW, { backgroundColor: this.props.item.color }]}> */}
-                    <Image style={styles.buttonIcon} source={require('../../asset/image/english-program.png')} />
-                        </View>
-                        <Text style={styles.buttonText}>{this.props.item.nameShow}</Text>
-                    </TouchableOpacity>
-                )
-                break;
-            case 'japanese-program':
-                return (
-                    <TouchableOpacity
-                        onPress={() => this.props.onButton(this.props.item)}
-                        style={styles.gridButton}>
-                        <View style={[styles.gridIconContainer, APPEARANCES.SHADOW, { backgroundColor: this.props.item.color }]}> */}
-                    <Image style={styles.buttonIcon} source={require('../../asset/image/japanese-program.png')} />
-                        </View>
-                        <Text style={styles.buttonText}>{this.props.item.nameShow}</Text>
-                    </TouchableOpacity>
-                )
-                break;
-            default:
-                return (
-                    <TouchableOpacity
-                        onPress={() => this.props.onButton(this.props.item)}
-                        style={styles.gridButton}>
-                        <View style={[styles.gridIconContainer, APPEARANCES.SHADOW, { backgroundColor: this.props.item.color }]}> */}
-                <Image style={styles.buttonIcon} source={require('../../asset/image/chinese-program.png')} />
-                        </View>
-                        <Text style={styles.buttonText}>{this.props.item.nameShow}</Text>
-                    </TouchableOpacity>
-                )
-        }
 
-    }
     render() {
+        const { onButton, program, backgroundColor,name } = this.props
+        let bgColor = COLORS.MAIN;
+        if (backgroundColor)
+            bgColor = backgroundColor;
         return (
-            this.switchButton(this.props.item)
+            <TouchableOpacity
+                onPress={() => onButton(program)}
+                style={styles.gridButton}>
+                <View style={[styles.gridIconContainer, APPEARANCES.SHADOW, { backgroundColor: bgColor }]}>
+                    <Image style={styles.buttonIcon} source={require('../../asset/image/thai-program.png')} />
+                </View>
+                <Text style={styles.buttonText}>{name}</Text>
+            </TouchableOpacity>
         );
     }
 }

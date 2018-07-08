@@ -5,6 +5,7 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -48,9 +49,9 @@
 		A033E90BEC204941ACB3F321 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9992B53FA63544BABFEE3B49 /* SimpleLineIcons.ttf */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		B34D8AE655A44ABDB7341DD4 /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 14474EB5BEA14895A9E75014 /* libRNVectorIcons.a */; };
-		D8C9453520ED276900A5CF6D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D8C9450D20ED276900A5CF6D /* GoogleService-Info.plist */; };
 		DCC47E420B643F7620D6291B /* libPods-pucCloud-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90EA9DA0DCC2BE6215B0FC93 /* libPods-pucCloud-tvOSTests.a */; };
 		DCDA943A2D624A9593CDD989 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 100A1DA89AED4561B599B629 /* Foundation.ttf */; };
+		DCEEF63C20F1D1740012EFE6 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DCEEF63B20F1D1740012EFE6 /* GoogleService-Info.plist */; };
 		E02B0E08E32C4EC0B516F973 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1496CF25FB56441D9D1376F2 /* EvilIcons.ttf */; };
 		E7EBA54FA78742E8B8F9156A /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8CB79105BE40768E5A2677 /* libRNFirebase.a */; };
 		EBC297A0347948D2984A61BD /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A65FD5BDB284D34B1AFFF88 /* Ionicons.ttf */; };
@@ -396,7 +397,7 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		ADEAAF0DEFBB4CA0AC4949F3 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		AF67DABB3B6B654EC8AA7B67 /* libPods-pucCloud-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-pucCloud-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8C9450D20ED276900A5CF6D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DCEEF63B20F1D1740012EFE6 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../assets/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E328568F23C544528E542E24 /* RNFirebase.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFirebase.xcodeproj; path = "../node_modules/react-native-firebase/ios/RNFirebase.xcodeproj"; sourceTree = "<group>"; };
 		E52BFE528A2ABF710831E370 /* libPods-pucCloud.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-pucCloud.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF125517E66D41F0832E1009 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Feather.ttf"; sourceTree = "<group>"; };
@@ -547,6 +548,7 @@
 		13B07FAE1A68108700A75B9A /* pucCloud */ = {
 			isa = PBXGroup;
 			children = (
+				DCEEF63B20F1D1740012EFE6 /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -659,7 +661,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				D8C9450D20ED276900A5CF6D /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* pucCloud */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* pucCloudTests */,
@@ -1221,7 +1222,7 @@
 				867E3F7BF853456BB7146AF6 /* Octicons.ttf in Resources */,
 				A033E90BEC204941ACB3F321 /* SimpleLineIcons.ttf in Resources */,
 				5B51FAF3A9D5423AA26A712C /* Zocial.ttf in Resources */,
-				D8C9453520ED276900A5CF6D /* GoogleService-Info.plist in Resources */,
+				DCEEF63C20F1D1740012EFE6 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1504,6 +1505,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ticketsflash.apps;
 				PRODUCT_NAME = pucCloud;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -1527,6 +1529,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.ticketsflash.apps;
 				PRODUCT_NAME = pucCloud;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

@@ -2,18 +2,16 @@ import React, { Component } from "react";
 import { createBottomTabNavigator } from "react-navigation";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
-import RegistrationRouting from "./registrationRoute";
-import MeRouting from "./meRouting";
-import MeScreen from "../screen/me";
+import ProgramScreen from "../screen/program";
 
-const color = "#353535";
+const color = "rgba(0,0,0,0.5)";
 const activeColor = '#000';
 const AppRouting = createBottomTabNavigator(
   {
-    Register: {
-      screen: RegistrationRouting,
+    Program: {
+      screen: ProgramScreen,
       navigationOptions: {
-        title: "Register",
+        title: "Program",
         tabBarIcon: ({ focused }) =>
           focused ? (
             <MaterialIcons
@@ -34,7 +32,7 @@ const AppRouting = createBottomTabNavigator(
     },
    
     Me: {
-      screen: MeRouting,
+      screen: ProgramScreen,
       navigationOptions: {
         title: "Me",
         tabBarIcon: ({ focused }) =>
@@ -55,8 +53,30 @@ const AppRouting = createBottomTabNavigator(
           )
       }
     },
+    Notification: {
+      screen: ProgramScreen,
+      navigationOptions: {
+        title: "Notification",
+        tabBarIcon: ({ focused }) =>
+          focused ? (
+            <MaterialIcons
+              name="notifications"
+              size={24}
+              iconStyle={{ paddingBottom: 0, paddingTop: 0 }}
+              color={activeColor}
+            />
+          ) : (
+            <MaterialIcons
+              name="notifications"
+              size={24}
+              iconStyle={{ paddingBottom: 0, paddingTop: 0 }}
+              color={color}
+            />
+          )
+      }
+    },
     Menu: {
-      screen: MeScreen,
+      screen: ProgramScreen,
       navigationOptions: {
         title: "Menu",
         tabBarIcon: ({ focused }) =>
@@ -76,12 +96,12 @@ const AppRouting = createBottomTabNavigator(
             />
           )
       }
-    }
+    },
   },
   {
     removeClippedSubviews : true,
     swipeEnabled: true,
-    initialRouteName: "Register",
+    initialRouteName: "Program",
     tabBarPosition: "bottom",
     animationEnabled: true,
     activeTintColor: activeColor,

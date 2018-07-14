@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-popover-menu')
     compile(project(':react-native-firebase')) {
         transitive = false
     }

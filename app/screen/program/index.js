@@ -1,26 +1,57 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, FlatList } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, FlatList, ActivityIndicator } from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
-import {COLORS, DIMENSION, APPEARANCES } from '../../module'
-// create a component
+import { COLORS, DIMENSION, APPEARANCES } from '../../module';
+import ProgramComponent from './program';
+import { observer, inject } from 'mobx-react';
+import LoadingComponent from '../../component/loading';
+
+@inject('programs','user')
+@observer
 class ProgramScreen extends Component {
+
+    componentDidMount() {
+        this.props.programs.fetchPrograms();
+    }
+
+    onProgram(program){
+        const { user } = this.props.user;
+        if(!user){
+            this.props.navigation.navigate('LoginSignUp',{program:program})
+        }else{
+            this.props.navigation.navigate('Register',{program:program})
+        }
+    }
+
     render() {
+        const { programs, loading } = this.props.programs;
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.container}>
-                    <View style={styles.header}>
-                        <Text style={styles.headerTittle}> Program </Text>
+                    <View style={[styles.header]}>
+                        <Text style={styles.headerTittle}> Programs </Text>
                         <Ionicons style={styles.notificationIcon} name={'md-settings'} />
                     </View>
                     <View style={styles.body}>
-                    
-                        {/* <FlatList
-                        style = {}
-                        data = {}
-                        keyExtractor = {(index,item) => {index.toString()}}
-                        renderItem = {({index,item}) => {}}
-                         /> */}
+                        {
+                            loading ? <LoadingComponent />
+                                :
+                                <FlatList
+                                    style={styles.programs}
+                                    numColumns={2}
+                                    data={programs.slice()}
+                                    keyExtractor={(item, index) =>  index.toString()}
+                                    renderItem={({ index, item }) => {
+                                        return (<ProgramComponent
+                                            onPress = {(program) => this.onProgram(program)}
+                                            {...item}
+                                        />)
+                                    }}
+
+                                />
+                        }
+
                     </View>
                 </View>
             </SafeAreaView>
@@ -29,6 +60,7 @@ class ProgramScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+
     container: {
         flex: 1,
         backgroundColor: COLORS.BACKGROUND,
@@ -40,7 +72,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        borderBottomWidth:0.2,
+        borderBottomWidth: 0.17,
         borderColor: '#333'
     },
     headerTittle: {
@@ -53,7 +85,7 @@ const styles = StyleSheet.create({
         fontWeight: '800',
         color: COLORS.TEXT_DARK,
     },
-  
+
     body: {
         flex: 1,
         justifyContent: 'center',

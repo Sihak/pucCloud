@@ -3,13 +3,14 @@ import { createBottomTabNavigator } from "react-navigation";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 import ProgramScreen from "../screen/program";
+import ProgramRouting from "./programRouting";
 
 const color = "rgba(0,0,0,0.5)";
 const activeColor = '#000';
 const AppRouting = createBottomTabNavigator(
   {
     Program: {
-      screen: ProgramScreen,
+      screen: ProgramRouting,
       navigationOptions: {
         title: "Program",
         tabBarIcon: ({ focused }) =>

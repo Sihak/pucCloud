@@ -11,7 +11,6 @@ export default class Programs{
     @action fetchPrograms(){
         this.loading = true;
         getPrograms().where('status', '==', 1).onSnapshot(docs => {
-            console.log('DOCS',docs)
             this.loading = false;
             this.programs = pushToArray(docs);
         })

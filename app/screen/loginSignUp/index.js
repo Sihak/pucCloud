@@ -176,7 +176,7 @@ class LoginSignUp extends Component {
 
                             }
                         </View>
-                        {/* {   
+                        {   
                             this.state.type == 'signin' ?
                                 <View style={styles.failContainer}>
                                     <Text style={styles.failtText}> {this.errorHandler()} </Text>
@@ -184,7 +184,7 @@ class LoginSignUp extends Component {
                                 : <View style={styles.failSignupContainer}>
                                     <Text style={styles.failtText}> {this.errorHandler()} </Text>
                                 </View>
-                        } */}
+                        }
                     </View>
                 </View>
             </SafeAreaView>

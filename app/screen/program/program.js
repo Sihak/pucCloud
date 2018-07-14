@@ -7,7 +7,7 @@ import { COLORS, DIMENSION, APPEARANCES } from '../../module'
 // create a component
 class ProgramComponent extends Component {
     render() {
-        const { institute } = this.props;
+        const  institute  = this.props;
         return (
             <View style={styles.program}>
                 <TouchableOpacity

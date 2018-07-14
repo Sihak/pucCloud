@@ -1,13 +1,15 @@
 import React, { Component } from "react";
-import { createBottomTabNavigator } from "react-navigation";
+import { TabNavigator } from "react-navigation";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 import ProgramScreen from "../screen/program";
 import ProgramRouting from "./programRouting";
+import { COLORS } from '../module'
+import MeScreen from "../screen/me";
 
 const color = "rgba(0,0,0,0.5)";
-const activeColor = '#000';
-const AppRouting = createBottomTabNavigator(
+const activeColor = '#333';
+const AppRouting = TabNavigator(
   {
     Program: {
       screen: ProgramRouting,
@@ -33,7 +35,7 @@ const AppRouting = createBottomTabNavigator(
     },
    
     Me: {
-      screen: ProgramScreen,
+      screen: MeScreen,
       navigationOptions: {
         title: "Me",
         tabBarIcon: ({ focused }) =>

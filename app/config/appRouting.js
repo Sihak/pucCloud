@@ -4,8 +4,7 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 
 import ProgramScreen from "../screen/program";
 import ProgramRouting from "./programRouting";
-import { COLORS } from '../module'
-import MeScreen from "../screen/me";
+import MeRouting from "./meRouting";
 
 const color = "rgba(0,0,0,0.5)";
 const activeColor = '#333';
@@ -35,7 +34,7 @@ const AppRouting = TabNavigator(
     },
    
     Me: {
-      screen: MeScreen,
+      screen: MeRouting,
       navigationOptions: {
         title: "Me",
         tabBarIcon: ({ focused }) =>

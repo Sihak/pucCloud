@@ -3,41 +3,59 @@ import { auth } from '../../service/dataService/dataService';
 
 export default class User {
 
-    constructor(){
+    constructor() {
         this.getCurrentUser();
-        // auth().signOut()
     }
 
     @observable user = null;
     @observable loading = false;
     @observable error = null;
 
-    @action signInUser(email,password){
+    @action signInUser(email, password, callback) {
         this.loading = true;
-        auth().signInAndRetrieveDataWithEmailAndPassword(email,password).then(user => {
+        auth().signInAndRetrieveDataWithEmailAndPassword(email, password).then(user => {
             this.loading = false;
-            this.user = user;
+            this.getCurrentUser();
+            callback(true,false)
         }).catch(error => {
             this.loading = false;
             this.error = error;
         })
     };
-    @action signupUser(email,password){
+    @action signupUser(email, password, callback) {
         this.loading = true;
-        auth().createUserAndRetrieveDataWithEmailAndPassword(email,password).then(user => {
+        auth().createUserAndRetrieveDataWithEmailAndPassword(email, password).then(user => {
             this.loading = false;
-            this.user = user;
+            this.getCurrentUser();
+            callback(true,false)
         }).catch(error => {
             this.loading = false;
             this.error = error;
         })
     };
 
-    @action getCurrentUser(){
+    @action getCurrentUser() {
         this.loading = true;
         auth().onAuthStateChanged(user => {
             this.loading = false;
             this.user = user;
         })
+    }
+
+    @action upDateDisplayName(name) {
+        this.loading = true;
+        auth().currentUser.updateProfile({
+            displayName: name,
+        }).then((user) => {
+            this.user = user;
+            this.loading = false;
+        }).catch(function (error) {
+            this.loading = false;
+            this.error = error;
+        });
+    }
+
+    @action  userSignOut(){
+       auth().signOut();
     }
 }

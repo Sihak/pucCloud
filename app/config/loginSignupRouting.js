@@ -1,29 +1,23 @@
 import { createStackNavigator } from 'react-navigation';
-import ProgramScreen from '../screen/program';
 import LoginSignUp from '../screen/loginSignUp';
-import RegisterScreen from '../screen/register';
-import RegisterDetails from '../screen/register/registerDetails';
+import registerProgramRouting from './registerProgramRouting';
 export default LoginSignUpRouting = createStackNavigator({
-
-    LoginSignUp:{
+  
+    LoginSignUp: {
         screen: LoginSignUp,
-        navigationOptions:{
-            gesturesEnabled : false
+        navigationOptions: {
+            gesturesEnabled: false
         }
     },
-    Register:{
-        screen: RegisterScreen,
-        navigationOptions:{
-            gesturesEnabled : false
+    Register: {
+        screen: registerProgramRouting,
+        navigationOptions: {
+            gesturesEnabled: false
         }
     },
-    RegisterDetails:{
-        screen: RegisterDetails,
-        navigationOptions:{
-            gesturesEnabled : false,
-        }
-    }
+   
 }, {
+        initialRouteName:'LoginSignUp',
         headerMode: 'none',
         mode: 'card'
     })

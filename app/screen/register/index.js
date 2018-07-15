@@ -5,6 +5,8 @@ import { COLORS, DIMENSION, APPEARANCES } from '../../module'
 import { inject, observer } from 'mobx-react';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import moment from 'moment';
 import {
     Menu,
@@ -98,6 +100,7 @@ class RegisterScreen extends Component {
         const { loading, programTypes } = this.props.register;
         const institute = this.props.navigation.state.params.program;
         return (
+            <KeyboardAwareScrollView style ={styles.container}>
             <SafeAreaView style={styles.container}>
                 <View style={styles.loadingHandler}></View>
                 <View style={styles.container}>
@@ -246,6 +249,7 @@ class RegisterScreen extends Component {
                     onCancel={() => this._hideDateTimePicker()}
                 />
             </SafeAreaView>
+            </KeyboardAwareScrollView>
         );
     }
 }
@@ -274,6 +278,7 @@ const styles = StyleSheet.create({
     textButton: {
         fontSize: 32,
         color: COLORS.MAIN,
+        fontWeight:'300'
     },
 
     textInput: {

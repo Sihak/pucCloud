@@ -5,8 +5,7 @@ import { COLORS, DIMENSION, APPEARANCES } from '../../module'
 import { inject, observer } from 'mobx-react';
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
-import * as Animatable from 'react-native-animatable';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 @inject('user')
 @observer
@@ -40,7 +39,11 @@ class LoginSignUp extends Component {
                     )
                 }
                 else {
-                    this.props.user.signInUser(email, password);
+                    await this.props.user.signInUser(email, password, (success, response) => {
+                        if (success) {
+                            this.navigate()
+                        }
+                    })
                 }
             } else {
                 this.setState({ isSignin: true, isSignup: false })
@@ -60,7 +63,9 @@ class LoginSignUp extends Component {
                         )
                     }
                     else {
-                        this.props.user.signupUser(email, password);
+                        this.props.user.signupUser(email, password, (success, response) => {
+                            this.navigate()
+                        });
                     }
                 }
                 else {
@@ -80,6 +85,16 @@ class LoginSignUp extends Component {
         }
     }
 
+    async navigate() {
+        if (this.props.navigation.state.params.fromMe) {
+            this.props.navigation.goBack();
+        }
+        else {
+            await this.props.navigation.popToTop();
+            this.props.navigation.navigate('Register', { program: this.props.navigation.state.params.program });
+        }
+    }
+
     errorHandler() {
         const { error } = this.props.user;
         return (error)
@@ -88,114 +103,116 @@ class LoginSignUp extends Component {
     render() {
         const { loading } = this.props.user;
         return (
-            <SafeAreaView style={styles.container}>
-                <View style={styles.loadingHandler}></View>
-                <View style={styles.container}>
-                    <View style={[styles.header]}>
-                        <Text style={styles.headerTittle}> PUC Student </Text>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.goBack()}
-                        >
-                            <Ionicons style={styles.closeIcon} name={'md-close'} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.guideContainer}>
-                        <Text style={styles.welcomeWord}>
-                            Welcome,
-                    </Text>
-                        <Text style={styles.guide}>
-                            {this.state.type == 'signin' ? 'sign in' : 'sign up'} to continue to register.
-                    </Text>
-                    </View>
-                    <View style={styles.body}>
-                        {
-                            loading ? <Image source={require('../../asset/image/loading.gif')} style={styles.logo} />
-                                :
-                                <Image source={require('../../asset/image/PUC_logo.png')} style={styles.logo} />
-                        }
-                        <View style={styles.textInput}>
-                            <TextInput
-                                editable={loading ? false : true}
-                                style={[styles.textBox, this.state.textboxFocused == 'sEmail' && { borderBottomWidth: 2, borderColor: COLORS.MAIN }]}
-                                onFocus={() => this.setState({ textboxFocused: 'sEmail' })}
-                                onEndEditing={() => this.setState({ textboxFocused: '' })}
-                                onChangeText={(value) => this.setState({ email: value })}
-                                autoCorrect={false}
-                                autoCapitalize={'none'}
-                                placeholder={'email...'}
-                            />
+            <KeyboardAwareScrollView style={styles.container}>
+                <SafeAreaView style={styles.container}>
+                    <View style={styles.loadingHandler}></View>
+                    <View style={styles.container}>
+                        <View style={[styles.header]}>
+                            <Text style={styles.headerTittle}> PUC Student </Text>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.popToTop()}
+                            >
+                                <Ionicons style={styles.closeIcon} name={'md-close'} />
+                            </TouchableOpacity>
                         </View>
-                        <View style={styles.textInput}>
-                        <TextInput
-                            editable={loading ? false : true}
-                            style={[styles.textBox, this.state.textboxFocused == 'sPassword' && { borderBottomWidth: 2, borderColor: COLORS.MAIN }]}
-                            onFocus={() => this.setState({ textboxFocused: 'sPassword' })}
-                            onEndEditing={() => this.setState({ textboxFocused: '' })}
-                            onChangeText={(value) => this.setState({ password: value })}
-                            autoCorrect={false}
-                            autoCapitalize={'none'}
-                            secureTextEntry={true}
-                            placeholder={'password...'}
-                        />
+                        <View style={styles.guideContainer}>
+                            <Text style={styles.welcomeWord}>
+                                Welcome,
+                    </Text>
+                            <Text style={styles.guide}>
+                                {this.state.type == 'signin' ? 'sign in' : 'sign up'} to continue to register.
+                    </Text>
                         </View>
-                        {
-                            this.state.type == 'signup' &&
-                            <TextInput
-                                editable={loading ? false : true}
-                                style={[styles.textBox, this.state.textboxFocused == 'sVarifyPassword' && { borderBottomWidth: 2, borderColor: COLORS.MAIN }]}
-                                onFocus={() => this.setState({ textboxFocused: 'sVarifyPassword' })}
-                                onEndEditing={() => this.setState({ textboxFocused: '' })}
-                                onChangeText={(value) => this.setState({ vPassword: value })}
-                                autoCorrect={false}
-                                autoCapitalize={'none'}
-                                secureTextEntry={true}
-                                placeholder={'varify password...'}
-                            />
-
-                        }
-
-                        <View style={[styles.buttonContainer, { flexDirection: 'column' }]}>
-                            <View style={[styles.buttonContainer, { alignItems: 'center' }]}>
-                                <TouchableOpacity
-                                    disabled={loading && true}
-                                    onPress={() => this.onButton('signin')}
-                                    style={[styles.button]}>
-                                    <Text style={[styles.buttonText, this.state.type == 'signin' && { color: COLORS.MAIN }]}> Sign in </Text>
-                                </TouchableOpacity>
-                                <Text style={styles.split}>|</Text>
-                                <TouchableOpacity
-                                    disabled={loading && true}
-                                    onPress={() => this.onButton('signup')}
-                                    style={styles.button}>
-                                    <Text style={[styles.buttonText, this.state.type == 'signup' && { color: COLORS.MAIN }]}> Sign up </Text>
-                                </TouchableOpacity>
+                        <View style={styles.body}>
+                            {
+                                loading ? <Image source={require('../../asset/image/loading.gif')} style={styles.logo} />
+                                    :
+                                    <Image source={require('../../asset/image/PUC_logo.png')} style={styles.logo} />
+                            }
+                            <View style={styles.textInput}>
+                                <TextInput
+                                    editable={loading ? false : true}
+                                    style={[styles.textBox, this.state.textboxFocused == 'sEmail' && { borderBottomWidth: 2, borderColor: COLORS.MAIN }]}
+                                    onFocus={() => this.setState({ textboxFocused: 'sEmail' })}
+                                    onEndEditing={() => this.setState({ textboxFocused: '' })}
+                                    onChangeText={(value) => this.setState({ email: value })}
+                                    autoCorrect={false}
+                                    autoCapitalize={'none'}
+                                    placeholder={'email...'}
+                                />
+                            </View>
+                            <View style={styles.textInput}>
+                                <TextInput
+                                    editable={loading ? false : true}
+                                    style={[styles.textBox, this.state.textboxFocused == 'sPassword' && { borderBottomWidth: 2, borderColor: COLORS.MAIN }]}
+                                    onFocus={() => this.setState({ textboxFocused: 'sPassword' })}
+                                    onEndEditing={() => this.setState({ textboxFocused: '' })}
+                                    onChangeText={(value) => this.setState({ password: value })}
+                                    autoCorrect={false}
+                                    autoCapitalize={'none'}
+                                    secureTextEntry={true}
+                                    placeholder={'password...'}
+                                />
                             </View>
                             {
-                                this.state.type == 'signin' &&
-                                <Text style={[styles.forgotPWD]}> forgot password </Text>
+                                this.state.type == 'signup' &&
+                                <TextInput
+                                    editable={loading ? false : true}
+                                    style={[styles.textBox, this.state.textboxFocused == 'sVarifyPassword' && { borderBottomWidth: 2, borderColor: COLORS.MAIN }]}
+                                    onFocus={() => this.setState({ textboxFocused: 'sVarifyPassword' })}
+                                    onEndEditing={() => this.setState({ textboxFocused: '' })}
+                                    onChangeText={(value) => this.setState({ vPassword: value })}
+                                    autoCorrect={false}
+                                    autoCapitalize={'none'}
+                                    secureTextEntry={true}
+                                    placeholder={'varify password...'}
+                                />
 
                             }
+
+                            <View style={[styles.buttonContainer, { flexDirection: 'column' }]}>
+                                <View style={[styles.buttonContainer, { alignItems: 'center' }]}>
+                                    <TouchableOpacity
+                                        disabled={loading && true}
+                                        onPress={() => this.onButton('signin')}
+                                        style={[styles.button]}>
+                                        <Text style={[styles.buttonText, this.state.type == 'signin' && { color: COLORS.MAIN }]}> Sign in </Text>
+                                    </TouchableOpacity>
+                                    <Text style={styles.split}>|</Text>
+                                    <TouchableOpacity
+                                        disabled={loading && true}
+                                        onPress={() => this.onButton('signup')}
+                                        style={styles.button}>
+                                        <Text style={[styles.buttonText, this.state.type == 'signup' && { color: COLORS.MAIN }]}> Sign up </Text>
+                                    </TouchableOpacity>
+                                </View>
+                                {
+                                    this.state.type == 'signin' &&
+                                    <Text style={[styles.forgotPWD]}> forgot password </Text>
+
+                                }
+                            </View>
+                            {
+                                this.state.type == 'signin' ?
+                                    <View style={styles.failContainer}>
+                                        <Text style={styles.failtText}> {this.errorHandler()} </Text>
+                                    </View>
+                                    : <View style={styles.failSignupContainer}>
+                                        <Text style={styles.failtText}> {this.errorHandler()} </Text>
+                                    </View>
+                            }
                         </View>
-                        {   
-                            this.state.type == 'signin' ?
-                                <View style={styles.failContainer}>
-                                    <Text style={styles.failtText}> {this.errorHandler()} </Text>
-                                </View>
-                                : <View style={styles.failSignupContainer}>
-                                    <Text style={styles.failtText}> {this.errorHandler()} </Text>
-                                </View>
-                        }
                     </View>
-                </View>
-            </SafeAreaView>
+                </SafeAreaView>
+            </KeyboardAwareScrollView>
         );
     }
 }
 
 // define your styles
 const styles = StyleSheet.create({
-    loadingHandler: {
-        height: 5,
+    container: {
+        flex: 1
     },
     failSignupContainer: {
         padding: DIMENSION(5),
@@ -212,16 +229,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         padding: DIMENSION(5),
         width: DIMENSION(100),
-        height: DIMENSION(35)
     },
     container: {
         flex: 1,
         backgroundColor: COLORS.BACKGROUND,
     },
-    textInputIcon:{
+    textInputIcon: {
         fontSize: 24,
-        color:COLORS.TEXT_DARK,
-        marginTop:DIMENSION(2.5),
+        color: COLORS.TEXT_DARK,
+        marginTop: DIMENSION(2.5),
     },
     forgotPWD: {
         fontSize: 22,
@@ -253,11 +269,11 @@ const styles = StyleSheet.create({
         fontWeight: '300',
         color: 'rgba(0,0,0,.5)',
     },
-    textInput:{
-        paddingHorizontal:DIMENSION(2),
+    textInput: {
+        paddingHorizontal: DIMENSION(2),
         flexDirection: 'row',
-        justifyContent:'center',
-        alignItems:'center',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     logo: {
         width: DIMENSION(40),
@@ -276,12 +292,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: DIMENSION(8)
     },
     welcomeWord: {
-        fontSize: 32,
+        fontSize: DIMENSION(12),
         fontWeight: '300',
         color: COLORS.TEXT_DARK,
     },
     guide: {
-        fontSize: 28,
+        fontSize: DIMENSION(8),
         color: 'rgba(0,0,0,0.5)',
         fontWeight: '300'
     },
@@ -294,12 +310,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     headerTittle: {
-        fontSize: 32,
-        fontWeight: '800',
-        color: COLORS.TEXT_DARK,
-    },
-    notificationIcon: {
-        fontSize: 32,
+        fontSize: DIMENSION(10),
         fontWeight: '800',
         color: COLORS.TEXT_DARK,
     },

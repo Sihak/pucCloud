@@ -1,9 +1,7 @@
 import { createStackNavigator } from 'react-navigation';
 import ProgramScreen from '../screen/program';
-import RegisterScreen from '../screen/register';
-import RegisterDetails from '../screen/register/registerDetails';
-import loginSignupRouting from './loginSignupRouting';
 import RegisterProgramRouting from './registerProgramRouting';
+import loginSignupRouting from './loginSignupRouting';
 export default ProgramRouting = createStackNavigator({
 
     Programs: {

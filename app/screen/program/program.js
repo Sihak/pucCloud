@@ -23,10 +23,6 @@ class ProgramComponent extends Component {
 }
 
 const styles = StyleSheet.create({
-    programs: {
-        padding: 5,
-    },
-
     program: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -40,7 +36,7 @@ const styles = StyleSheet.create({
     },
 
     programIcon: {
-        fontSize: 140,
+        fontSize: DIMENSION(30),
         color: 'rgba(255,255,255,1)',
     },
 

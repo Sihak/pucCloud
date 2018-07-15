@@ -7,7 +7,7 @@ import ProgramComponent from './program';
 import { observer, inject } from 'mobx-react';
 import LoadingComponent from '../../component/loading';
 
-@inject('programs','user')
+@inject('programs', 'user')
 @observer
 class ProgramScreen extends Component {
 
@@ -15,13 +15,9 @@ class ProgramScreen extends Component {
         this.props.programs.fetchPrograms();
     }
 
-    onProgram(program){
+    onProgram(program) {
         const { user } = this.props.user;
-        if(!user){
-            this.props.navigation.navigate('LoginSignUp',{program:program})
-        }else{
-            this.props.navigation.navigate('Register',{program:program})
-        }
+        this.props.navigation.navigate(user ? 'Register' : 'LoginSignUp', { program: program })
     }
 
     render() {
@@ -41,10 +37,10 @@ class ProgramScreen extends Component {
                                     style={styles.programs}
                                     numColumns={2}
                                     data={programs.slice()}
-                                    keyExtractor={(item, index) =>  index.toString()}
+                                    keyExtractor={(item, index) => index.toString()}
                                     renderItem={({ index, item }) => {
                                         return (<ProgramComponent
-                                            onPress = {(program) => this.onProgram(program)}
+                                            onPress={(program) => this.onProgram(program)}
                                             {...item}
                                         />)
                                     }}
@@ -72,7 +68,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        borderBottomWidth: 0.17,
+        borderBottomWidth: 0.2,
         borderColor: '#333'
     },
     headerTittle: {

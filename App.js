@@ -5,7 +5,7 @@ import { Provider } from 'mobx-react'
 import store from './app/store';
 import { YellowBox } from 'react-native';
 import { MenuProvider } from 'react-native-popup-menu';
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated','Class RCTCxxModule' ,'Method `jumpToIndex`','Module RCTImageLoader']);
 
 export default class App extends Component {
 

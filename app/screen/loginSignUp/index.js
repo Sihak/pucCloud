@@ -43,6 +43,9 @@ class LoginSignUp extends Component {
                         if (success) {
                             this.navigate()
                         }
+                        else{
+                            alert(response)
+                        }
                     })
                 }
             } else {
@@ -64,7 +67,9 @@ class LoginSignUp extends Component {
                     }
                     else {
                         this.props.user.signupUser(email, password, (success, response) => {
-                            this.navigate()
+                            if (success) {
+                                this.navigate()
+                            }
                         });
                     }
                 }
@@ -120,7 +125,7 @@ class LoginSignUp extends Component {
                                 Welcome,
                     </Text>
                             <Text style={styles.guide}>
-                                {this.state.type == 'signin' ? 'sign in' : 'sign up'} to continue to register.
+                                {this.state.type == 'signin' ? 'sign in' : 'sign up'} to continue.
                     </Text>
                         </View>
                         <View style={styles.body}>
@@ -130,43 +135,49 @@ class LoginSignUp extends Component {
                                     <Image source={require('../../asset/image/PUC_logo.png')} style={styles.logo} />
                             }
                             <View style={styles.textInput}>
+                                <Text style={styles.label}>Email</Text>
                                 <TextInput
                                     editable={loading ? false : true}
-                                    style={[styles.textBox, this.state.textboxFocused == 'sEmail' && { borderBottomWidth: 2, borderColor: COLORS.MAIN }]}
+                                    style={[styles.textBox]}
                                     onFocus={() => this.setState({ textboxFocused: 'sEmail' })}
                                     onEndEditing={() => this.setState({ textboxFocused: '' })}
                                     onChangeText={(value) => this.setState({ email: value })}
                                     autoCorrect={false}
                                     autoCapitalize={'none'}
-                                    placeholder={'email...'}
+                                    placeholder={'enter your email'}
                                 />
                             </View>
                             <View style={styles.textInput}>
+                                <Text style={styles.label}>Password</Text>
                                 <TextInput
                                     editable={loading ? false : true}
-                                    style={[styles.textBox, this.state.textboxFocused == 'sPassword' && { borderBottomWidth: 2, borderColor: COLORS.MAIN }]}
+                                    style={[styles.textBox]}
                                     onFocus={() => this.setState({ textboxFocused: 'sPassword' })}
                                     onEndEditing={() => this.setState({ textboxFocused: '' })}
                                     onChangeText={(value) => this.setState({ password: value })}
                                     autoCorrect={false}
                                     autoCapitalize={'none'}
                                     secureTextEntry={true}
-                                    placeholder={'password...'}
+                                    placeholder={'enter password'}
                                 />
                             </View>
                             {
                                 this.state.type == 'signup' &&
-                                <TextInput
-                                    editable={loading ? false : true}
-                                    style={[styles.textBox, this.state.textboxFocused == 'sVarifyPassword' && { borderBottomWidth: 2, borderColor: COLORS.MAIN }]}
-                                    onFocus={() => this.setState({ textboxFocused: 'sVarifyPassword' })}
-                                    onEndEditing={() => this.setState({ textboxFocused: '' })}
-                                    onChangeText={(value) => this.setState({ vPassword: value })}
-                                    autoCorrect={false}
-                                    autoCapitalize={'none'}
-                                    secureTextEntry={true}
-                                    placeholder={'varify password...'}
-                                />
+                                <View style={styles.textInput}>
+                                    <Text style={styles.label}>Varify</Text>
+                                    <TextInput
+                                        editable={loading ? false : true}
+                                        style={[styles.textBox]}
+                                        onFocus={() => this.setState({ textboxFocused: 'sVarifyPassword' })}
+                                        onEndEditing={() => this.setState({ textboxFocused: '' })}
+                                        onChangeText={(value) => this.setState({ vPassword: value })}
+                                        autoCorrect={false}
+                                        autoCapitalize={'none'}
+                                        secureTextEntry={true}
+                                        placeholder={'varify password'}
+                                    />
+                                </View>
+
 
                             }
 
@@ -235,9 +246,12 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.BACKGROUND,
     },
     textInputIcon: {
+        flexDirection: 'row',
         fontSize: 24,
         color: COLORS.TEXT_DARK,
         marginTop: DIMENSION(2.5),
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     forgotPWD: {
         fontSize: 22,
@@ -270,34 +284,38 @@ const styles = StyleSheet.create({
         color: 'rgba(0,0,0,.5)',
     },
     textInput: {
-        paddingHorizontal: DIMENSION(2),
+        paddingVertical: DIMENSION(2),
+        paddingHorizontal: DIMENSION(6),
+        width: DIMENSION(100),
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        backgroundColor: '#fff',
     },
     logo: {
+        marginTop:DIMENSION(4),
         width: DIMENSION(40),
         height: DIMENSION(40),
         marginBottom: DIMENSION(5)
     },
     textBox: {
-        paddingHorizontal: DIMENSION(2),
-        width: DIMENSION(90),
+        color: COLORS.TEXT_DARK,
+        paddingHorizontal: DIMENSION(1),
+        width: DIMENSION(50),
         height: DIMENSION(10),
-        marginTop: DIMENSION(2),
         fontSize: 18,
         fontWeight: '300',
     },
     guideContainer: {
-        paddingHorizontal: DIMENSION(8)
+        paddingHorizontal: DIMENSION(7.5)
     },
     welcomeWord: {
-        fontSize: DIMENSION(12),
+        fontSize: DIMENSION(8),
         fontWeight: '300',
         color: COLORS.TEXT_DARK,
     },
     guide: {
-        fontSize: DIMENSION(8),
+        fontSize: DIMENSION(5),
         color: 'rgba(0,0,0,0.5)',
         fontWeight: '300'
     },
@@ -310,7 +328,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     headerTittle: {
-        fontSize: DIMENSION(10),
+        fontSize: DIMENSION(8),
         fontWeight: '800',
         color: COLORS.TEXT_DARK,
     },
@@ -320,6 +338,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    label: {
+        marginLeft: DIMENSION(3),
+        width: DIMENSION(30),
+        fontSize: 16,
+        fontWeight: '700',
+        color: '#333'
+    },
+
 });
 
 //make this component available to the app

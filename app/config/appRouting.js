@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { TabNavigator } from "react-navigation";
 import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-
-import ProgramScreen from "../screen/program";
 import ProgramRouting from "./programRouting";
 import MeRouting from "./meRouting";
+import NotificationScreen from "../screen/notification";
+import MenuScreen from "../screen/menu";
 
 const color = "rgba(0,0,0,0.5)";
 const activeColor = '#333';
@@ -56,7 +56,7 @@ const AppRouting = TabNavigator(
       }
     },
     Notification: {
-      screen: ProgramScreen,
+      screen: NotificationScreen,
       navigationOptions: {
         title: "Notification",
         tabBarIcon: ({ focused }) =>
@@ -78,7 +78,7 @@ const AppRouting = TabNavigator(
       }
     },
     Menu: {
-      screen: ProgramScreen,
+      screen: MenuScreen,
       navigationOptions: {
         title: "Menu",
         tabBarIcon: ({ focused }) =>
@@ -102,7 +102,7 @@ const AppRouting = TabNavigator(
   },
   {
     removeClippedSubviews : true,
-    swipeEnabled: true,
+    swipeEnabled: false,
     initialRouteName: "Program",
     tabBarPosition: "bottom",
     animationEnabled: true,

@@ -7,10 +7,14 @@ export default class Register {
     @observable loading = false;
     @observable error = null;
     @observable programTypes = [];
-    @observable preRegister = null;
+    @observable Register = null;
+    @observable isRegistered = false;
+
     @action fetchProgramType(instituteKey) {
         unfillteredData = null;
+        this.loading = true;
         ProgramType().onSnapshot(docs => {
+            this.loading = false;
             unfillteredData = pushToArray(docs);
             unfillteredData.forEach(doc => {
                 if (doc.institute.key == instituteKey) {
@@ -18,34 +22,23 @@ export default class Register {
                 }
             })
         });
-
     }
 
-    @action onPreRegister(
-        firstName,
-        lastName,
-        khmerFirstName,
-        khmerLastName,
-        gender,
-        mobilePhone,
-        email,
-        date_of_birth,
-        program,
-        admission_date,
-        description,
+    @action register(
+        khmerName, englishName, gender, date_of_birth, mobilePhone, email, program
     ) {
         this.preRegister = {
-            firstName:firstName,
-            lastName:lastName,
-            khmerFirstName:khmerFirstName,
-            khmerLastName:khmerLastName,
-            gender:gender,
-            mobilePhone:mobilePhone,
-            email:email,
-            date_of_birth:date_of_birth,
-            program:program,
-            admission_date:admission_date,
-            description:description,
+            khmerName: khmerName,
+            englishName: englishName,
+            gender: gender,
+            mobilePhone: mobilePhone,
+            email: email,
+            date_of_birth: date_of_birth,
+            program: program,
         }
+    }
+
+    @action changeIsRegister(value){
+        this.isRegistered = value;
     }
 }

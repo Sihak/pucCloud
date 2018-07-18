@@ -13,6 +13,7 @@ class ProgramScreen extends Component {
 
     componentDidMount() {
         this.props.programs.fetchPrograms();
+        this.props.user.getCurrentUser();
     }
 
     onProgram(program) {
@@ -21,6 +22,7 @@ class ProgramScreen extends Component {
     }
 
     render() {
+        
         const { programs, loading } = this.props.programs;
         return (
             <SafeAreaView style={styles.container}>

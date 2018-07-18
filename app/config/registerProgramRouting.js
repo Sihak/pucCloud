@@ -1,10 +1,16 @@
 
 import { createStackNavigator } from 'react-navigation';
-import ProgramScreen from '../screen/program';
-import LoginSignUp from '../screen/loginSignUp';
 import RegisterScreen from '../screen/register';
-import RegisterDetails from '../screen/register/registerDetails';
+import ListPrograms from '../screen/register/listPrograms';
+import paymentRouting from './paymentRouting';
 export default RegisterProgramRouting = createStackNavigator({
+
+    ListPrograms:{
+        screen: ListPrograms,
+        navigationOptions: {
+            gesturesEnabled: false
+        }
+    },
 
     Register: {
         screen: RegisterScreen,
@@ -12,8 +18,8 @@ export default RegisterProgramRouting = createStackNavigator({
             gesturesEnabled: false
         }
     },
-    RegisterDetails: {
-        screen: RegisterDetails,
+    Invoice: {
+        screen: paymentRouting,
         navigationOptions: {
             gesturesEnabled: false,
         }

@@ -4,7 +4,7 @@ import { auth } from '../../service/dataService/dataService';
 export default class User {
 
     constructor() {
-        this.getCurrentUser();
+        // auth().signOut()
     }
 
     @observable user = null;
@@ -13,25 +13,24 @@ export default class User {
 
     @action signInUser(email, password, callback) {
         this.loading = true;
-        auth().signInAndRetrieveDataWithEmailAndPassword(email, password).then(user => {
-            this.loading = false;
-            this.getCurrentUser();
-            callback(true,false)
-        }).catch(error => {
-            this.loading = false;
-            this.error = error;
-        })
+        auth().signInAndRetrieveDataWithEmailAndPassword(email, password)
+            .catch(error => {
+                this.loading = false;
+                callback(false, error)
+            }).then(account => {
+                this.loading = false;
+                callback(true, account)
+            })
     };
     @action signupUser(email, password, callback) {
-        this.loading = true;
-        auth().createUserAndRetrieveDataWithEmailAndPassword(email, password).then(user => {
-            this.loading = false;
-            this.getCurrentUser();
-            callback(true,false)
-        }).catch(error => {
-            this.loading = false;
-            this.error = error;
-        })
+        auth().createUserAndRetrieveDataWithEmailAndPassword(email, password)
+            .catch(error => {
+                this.loading = false;
+                callback(false, error)
+            }).then(account => {
+                this.loading = false;
+                callback(true, account)
+            })
     };
 
     @action getCurrentUser() {
@@ -47,7 +46,6 @@ export default class User {
         auth().currentUser.updateProfile({
             displayName: name,
         }).then((user) => {
-            this.user = user;
             this.loading = false;
         }).catch(function (error) {
             this.loading = false;
@@ -55,7 +53,7 @@ export default class User {
         });
     }
 
-    @action  userSignOut(){
-       auth().signOut();
+    @action userSignOut() {
+        auth().signOut();
     }
 }

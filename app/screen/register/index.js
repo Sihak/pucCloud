@@ -6,16 +6,16 @@ import { inject, observer } from 'mobx-react';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
+import ActionSheet from 'react-native-actionsheet'
 import moment from 'moment';
-import {
-    Menu,
-    MenuOptions,
-    MenuOption,
-    MenuTrigger,
-} from 'react-native-popup-menu';
+
 import LoadingComponent from '../../component/loading';
 
+
+const options = [
+    'Male',
+    'Female',
+]
 @inject('user', 'register')
 @observer
 class RegisterScreen extends Component {
@@ -26,28 +26,21 @@ class RegisterScreen extends Component {
             seletionDateType: null,
             isDateTimePickerVisible: false,
 
-            firstName: null,
-            lastName: null,
-            khmerFirstName: null,
-            khmerLastName: null,
+            khmerName: null,
+            englishName: null,
             gender: null,
             mobilePhone: null,
             email: null,
             date_of_birth: null,
-            program: {},
-            admission_date: null,
-            description: null,
         }
     }
 
 
     componentDidMount() {
-        const institute = this.props.navigation.state.params.program;
-        this.props.register.fetchProgramType(institute.id)
+
     }
 
     componentWillUnmount() {
-        this.props.register.programTypes = [];
     }
 
     _showDateTimePicker = (value) => {
@@ -72,14 +65,12 @@ class RegisterScreen extends Component {
 
 
     async onNext() {
-        const { firstName, lastName, khmerFirstName, khmerLastName,
-            gender, date_of_birth, mobilePhone, email,
-            program, admission_date, description } = this.state;
-        if (firstName && lastName && khmerFirstName && khmerLastName,
-            gender && date_of_birth && mobilePhone && email &&
-            program.name && admission_date) {
-                await this.props.register.onPreRegister(firstName, lastName, khmerFirstName, khmerLastName, gender, mobilePhone, email, date_of_birth, program, admission_date, description);
-                await this.props.navigation.navigate('RegisterDetails')
+        const { khmerName, englishName, gender, date_of_birth, mobilePhone, email } = this.state;
+        const { program } = this.props.navigation.state.params;
+        if (khmerName && englishName &&
+            gender && date_of_birth && mobilePhone && email) {
+            await this.props.register.register(khmerName, englishName, gender, date_of_birth, mobilePhone, email, program);
+            await this.props.navigation.navigate('Invoice')
         }
         else {
             Alert.alert(
@@ -95,160 +86,117 @@ class RegisterScreen extends Component {
 
 
 
-    render() {
-        const { gender, admission_date, date_of_birth, program } = this.state;
-        const { loading, programTypes } = this.props.register;
-        const institute = this.props.navigation.state.params.program;
-        return (
-            <KeyboardAwareScrollView style ={styles.container}>
-            <SafeAreaView style={styles.container}>
-                <View style={styles.loadingHandler}></View>
-                <View style={styles.container}>
-                    <View style={[styles.header]}>
-                        <Text style={styles.headerTittle}>{institute.shortName}</Text>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.popToTop()}
-                        >
-                            <Ionicons style={styles.closeIcon} name={'md-close'} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.guideContainer}>
-                        <Text style={styles.welvcomeWord}>
+    showActionSheet = () => {
+        this.ActionSheet.show()
+    }
 
-                        </Text>
-                        <Text style={styles.guide}>
-                            Register now to create your future today.
-                    </Text>
-                    </View>
-                    <View style={styles.body}>
-                        <View style={styles.textInput}>
-                            <TextInput
-                                editable={loading ? false : true}
-                                style={[styles.textBox]}
-                                onChangeText={(value) => this.setState({ firstName: value })}
-                                autoCorrect={false}
-                                autoCapitalize={'none'}
-                                placeholder={'first name'}
-                            />
-                            <TextInput
-                                editable={loading ? false : true}
-                                style={[styles.textBox]}
-                                onChangeText={(value) => this.setState({ lastName: value })}
-                                autoCorrect={false}
-                                autoCapitalize={'none'}
-                                placeholder={'last name'}
-                            />
+    render() {
+        const { user } = this.props.user;
+        const { loading } = this.props.register;
+        const { gender, date_of_birth } = this.state;
+        const { institute, program } = this.props.navigation.state.params;
+        return (
+            <KeyboardAwareScrollView style={[styles.container]}>
+                <SafeAreaView style={styles.container}>
+                    <View style={styles.container}>
+                        <View style={[styles.header]}>
+                            <Text style={styles.headerTittle}>{institute.shortName}</Text>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.popToTop()}
+                            >
+                                <Ionicons style={styles.closeIcon} name={'md-arrow-back'} />
+                            </TouchableOpacity>
                         </View>
-                        <View style={styles.textInput}>
-                            <TextInput
-                                editable={loading ? false : true}
-                                style={[styles.textBox]}
-                                onChangeText={(value) => this.setState({ khmerFirstName: value })}
-                                autoCorrect={false}
-                                autoCapitalize={'none'}
-                                placeholder={'khmer first name'}
-                            />
-                            <TextInput
-                                editable={loading ? false : true}
-                                style={[styles.textBox]}
-                                onChangeText={(value) => this.setState({ khmerLastName: value })}
-                                autoCorrect={false}
-                                autoCapitalize={'none'}
-                                placeholder={'khmer last name'}
-                            />
-                        </View>
-                        <View style={styles.textInput}>
-                            <Menu
-                                style={styles.picker}
-                                onSelect={value => this.setState({ gender: value })}>
-                                <MenuTrigger text={
-                                    <Text style={[styles.pickerText, gender && { color: COLORS.TEXT_DARK }]}>{gender ? gender : 'gender'}</Text>
-                                } />
-                                <MenuOptions>
-                                    <MenuOption style={styles.option} value={'Male'} text={'Male'} />
-                                    <MenuOption style={styles.option} value={'Female'} text={'Female'} />
-                                </MenuOptions>
-                            </Menu>
+                        <Text style={styles.guide}>Please enter your information.</Text>
+                        <View style={styles.body}>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.goBack()}
+                                style={styles.textInput} >
+                                <Text style={styles.label}>Selected Program</Text>
+                                <Text style={[styles.textInPicker, { color: COLORS.MAIN }]}>{program.doc.name}</Text>
+                            </TouchableOpacity>
+                            <View style={styles.textInput}>
+                                <Text style={styles.label}>Khmer Name</Text>
+                                <TextInput
+                                    editable={loading ? false : true}
+                                    style={[styles.textBox]}
+                                    onChangeText={(value) => this.setState({ khmerName: value })}
+                                    autoCorrect={false}
+                                    autoCapitalize={'none'}
+                                    placeholder={'your khmer name'}
+                                />
+                            </View>
+                            <View style={styles.textInput}>
+                                <Text style={styles.label}>English Name</Text>
+                                <TextInput
+                                    editable={loading ? false : true}
+                                    style={[styles.textBox]}
+                                    onChangeText={(value) => this.setState({ englishName: value })}
+                                    autoCorrect={false}
+                                    autoCapitalize={'none'}
+                                    placeholder={'your english name'}
+                                />
+                            </View>
+                            <TouchableOpacity
+                                onPress={this.showActionSheet}
+                                style={styles.textInput} >
+                                <Text style={styles.label}>Gender</Text>
+                                <Text style={[styles.textInPicker, gender && { color: COLORS.TEXT_DARK }]}>{gender ? gender : 'gender'}</Text>
+                            </TouchableOpacity>
+
                             <TouchableOpacity
                                 onPress={() => this._showDateTimePicker('dob')}
-                                style={styles.picker} >
-                                <Text style={[styles.pickerText, date_of_birth && { color: COLORS.TEXT_DARK }]}>
-                                    {date_of_birth ? date_of_birth : 'date of birth'}
-                                </Text>
+                                style={styles.textInput} >
+                                <Text style={styles.label}>Birthday</Text>
+                                <Text style={[styles.textInPicker, date_of_birth && { color: COLORS.TEXT_DARK }]}>{date_of_birth ? date_of_birth : 'select date of birth'}</Text>
                             </TouchableOpacity>
-                        </View>
-                        <View style={styles.textInput}>
-                            <TextInput
-                                editable={loading ? false : true}
-                                style={[styles.textBox]}
-                                onChangeText={(value) => this.setState({ mobilePhone: value })}
-                                autoCorrect={false}
-                                autoCapitalize={'none'}
-                                placeholder={'mobile phone'}
-                            />
-                            <TextInput
-                                editable={loading ? false : true}
-                                style={[styles.textBox]}
-                                onChangeText={(value) => this.setState({ email: value })}
-                                autoCorrect={false}
-                                autoCapitalize={'none'}
-                                placeholder={'email address'}
-                            />
-                        </View>
-                        <View style={styles.textInput}>
-                            <Menu
-                                style={styles.picker}
-                                onSelect={value => this.setState({ program: value })}>
-                                <MenuTrigger text={
-                                    <Text style={[styles.pickerText, program.name && { color: COLORS.TEXT_DARK }]}>{program.name ? program.name : 'program'}</Text>
-                                } />
-                                <MenuOptions>
-                                    <FlatList
-                                        data={programTypes.slice()}
-                                        keyExtractor={(item, index) => index.toString()}
-                                        renderItem={({ item }) => {
-                                            return (
-                                                <MenuOption style={styles.option} value={item.doc} text={item.doc.name} />
-                                            )
-                                        }}
-                                    />
-                                </MenuOptions>
-                            </Menu>
-                            <TouchableOpacity
-                                onPress={() => this._showDateTimePicker('admissionDate')}
-                                style={styles.picker} >
-                                <Text style={[styles.pickerText, admission_date && { color: COLORS.TEXT_DARK }]}>
-                                    {admission_date ? admission_date : 'admission date'}
-                                </Text>
-                            </TouchableOpacity>
-                        </View>
-                        <TextInput
-                            multiline={true}
-                            editable={loading ? false : true}
-                            style={[styles.descriptionBox]}
-                            onChangeText={(value) => this.setState({ description: value })}
-                            autoCorrect={false}
-                            autoCapitalize={'none'}
-                            placeholder={'description'}
-                        />
-                        {
-                            loading ? <LoadingComponent />
-                                :
-                                <TouchableOpacity
-                                    onPress={() => this.onNext()}
-                                    style={styles.buttonNext}>
-                                    <Text style={styles.textButton}>Next</Text>
-                                </TouchableOpacity>
-                        }
+                            <View style={styles.textInput}>
+                                <Text style={styles.label}>Mobile Phone</Text>
+                                <TextInput
+                                    editable={loading ? false : true}
+                                    style={[styles.textBox]}
+                                    onChangeText={(value) => this.setState({ mobilePhone: value })}
+                                    autoCorrect={false}
+                                    autoCapitalize={'none'}
+                                    placeholder={'your mobile phone'}
+                                />
+                            </View>
+                            <View style={styles.textInput}>
+                                <Text style={styles.label}>Email</Text>
+                                <TextInput
+                                    editable={loading ? false : true}
+                                    style={[styles.textBox]}
+                                    onChangeText={(value) => this.setState({ email: value })}
+                                    autoCorrect={false}
+                                    autoCapitalize={'none'}
+                                    placeholder={'your email'}
+                                />
+                            </View>
 
+                            {
+                                loading ? <LoadingComponent />
+                                    :
+                                    <TouchableOpacity
+                                        disabled={!user && true}
+                                        onPress={() => this.onNext()}
+                                        style={[styles.buttonNext, !user && { backgroundColor: 'rgba(0,0,0,.5)' }]}>
+                                        <Text style={styles.textButton}>Register</Text>
+                                    </TouchableOpacity>
+                            }
+                        </View>
                     </View>
-                </View>
-                <DateTimePicker
-                    isVisible={this.state.isDateTimePickerVisible}
-                    onConfirm={(date) => this._handleDatePicked(date)}
-                    onCancel={() => this._hideDateTimePicker()}
-                />
-            </SafeAreaView>
+                    <DateTimePicker
+                        isVisible={this.state.isDateTimePickerVisible}
+                        onConfirm={(date) => this._handleDatePicked(date)}
+                        onCancel={() => this._hideDateTimePicker()}
+                    />
+                    <ActionSheet
+                        ref={o => this.ActionSheet = o}
+                        title={'select your gender?'}
+                        options={options}
+                        onPress={(index) => { this.setState({ gender: index == 0 ? 'Male' : 'Female' }) }}
+                    />
+                </SafeAreaView>
             </KeyboardAwareScrollView>
         );
     }
@@ -270,34 +218,56 @@ const styles = StyleSheet.create({
     },
 
     buttonNext: {
+        width: DIMENSION(75),
         justifyContent: 'center',
         alignItems: 'center',
-        padding: DIMENSION(5),
+        padding: DIMENSION(2),
+        backgroundColor: COLORS.MAIN,
+        marginTop: DIMENSION(6),
+        borderRadius: 32,
     },
 
     textButton: {
-        fontSize: 32,
+        fontSize: 26,
         color: COLORS.MAIN,
-        fontWeight:'300'
+        fontWeight: '600',
+        color: '#fff',
     },
 
     textInput: {
-        paddingHorizontal: DIMENSION(2),
+        paddingVertical: DIMENSION(2),
+        paddingHorizontal: DIMENSION(6),
+        width: DIMENSION(100),
         flexDirection: 'row',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        backgroundColor: '#fff',
+        borderBottomWidth: 0.2,
+        borderColor: 'rgba(0,0,0,0.5)'
+    },
+
+    label: {
+        width: DIMENSION(40),
+        fontSize: 16,
+        fontWeight: '700',
+        color: '#333'
     },
 
     textBox: {
         color: COLORS.TEXT_DARK,
         paddingHorizontal: DIMENSION(1),
-        width: DIMENSION(44),
+        width: DIMENSION(50),
         height: DIMENSION(10),
         fontSize: 18,
         fontWeight: '300',
-        marginLeft: DIMENSION(2),
-        borderBottomWidth: 0.3,
-        marginTop: DIMENSION(2)
+    },
+    textInPicker: {
+        paddingVertical: DIMENSION(2),
+        width: DIMENSION(100),
+        backgroundColor: '#fff',
+        fontSize: 18,
+        color: 'rgba(0,0,0,0.18)'
+
     },
     descriptionBox: {
         width: DIMENSION(88),
@@ -314,18 +284,18 @@ const styles = StyleSheet.create({
         fontSize: 38,
         color: COLORS.RED
     },
-    guideContainer: {
-        paddingHorizontal: DIMENSION(8)
-    },
+
     welcomeWord: {
         fontSize: 32,
         fontWeight: '300',
         color: COLORS.TEXT_DARK,
     },
     guide: {
-        fontSize: 28,
+        fontSize: 18,
         color: 'rgba(0,0,0,0.5)',
-        fontWeight: '300'
+        fontWeight: '300',
+        paddingLeft: DIMENSION(6),
+        marginBottom: 25
     },
     header: {
         width: DIMENSION(100),
@@ -351,20 +321,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    picker: {
-        justifyContent: 'center',
-        paddingHorizontal: DIMENSION(1),
-        width: DIMENSION(44),
-        height: DIMENSION(10),
-        marginLeft: DIMENSION(2),
-        borderBottomWidth: 0.3,
-        marginTop: DIMENSION(2),
-    },
-    pickerText: {
-        fontSize: 18,
-        fontWeight: '300',
-        color: 'rgba(0,0,0,0.26)'
-    }
 });
 
 //make this component available to the app

@@ -7,7 +7,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 @inject('user', 'register')
 @observer
-class RegisterDetails extends Component {
+class MenuScreen extends Component {
     constructor() {
         super();
         this.state = {
@@ -17,7 +17,7 @@ class RegisterDetails extends Component {
 
 
     componentDidMount() {
-
+     
     }
 
     componentWillUnmount() {
@@ -29,16 +29,10 @@ class RegisterDetails extends Component {
                 <View style={styles.loadingHandler}></View>
                 <View style={styles.container}>
                     <View style={[styles.header]}>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.goBack()}
-                        >
-                            <Ionicons style={styles.closeIcon} name={'md-arrow-back'} />
-                        </TouchableOpacity>
-                        <Text style={styles.headerTittle}>Registration Details</Text>
-
+                        <Text style={styles.headerTittle}>Menu</Text>
                     </View>
                     <View style={styles.body}>
-
+                       
                     </View>
                 </View>
             </SafeAreaView>
@@ -82,5 +76,6 @@ const styles = StyleSheet.create({
 });
 
 //make this component available to the app
-export default RegisterDetails;
+export default MenuScreen;
+
 

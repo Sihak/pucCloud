@@ -38,6 +38,12 @@ class MeScreen extends Component {
         this.props.user.upDateDisplayName(this.state.newName)
     }
 
+    renderItemSplitter(){
+        return(
+            <View style = {{paddingVertical:DIMENSION(2)}}></View>
+        )
+    }
+
     render() {
         const { user, loading } = this.props.user;
         return (
@@ -45,23 +51,33 @@ class MeScreen extends Component {
                 {user ?
                     <View style={styles.TopContainer}>
                         <View style={styles.sumDetailsContainer}>
-                            <View style={styles.nameContainer}>
-                                <TextInput
-                                    autoCorrect={false}
-                                    ref='name'
-                                    editable={this.state.isNameEdit}
-                                    style={styles.userName}
-                                    placeholder={user.displayName ? user.displayName : 'Me'}
-                                    placeholderTextColor={this.state.isNameEdit ? COLORS.BLUE : '#333'}
-                                    onChangeText={(value) => this.setState({ newName: value })}
-                                    onSubmitEditing={() => this.onSubmit()}
-                                />
-                                <TouchableOpacity
-                                    onPress={() => this.onEdit()}
-                                    style={styles.button}>
-                                    <Text style={[styles.detail, { color: COLORS.BLUE }]}>Edit</Text>
-                                    <Ionicons style={[styles.interestingIcon, { color: COLORS.BLUE, marginTop: DIMENSION(2), marginLeft: DIMENSION(1), fontSize: 13 }]} name={'md-create'} />
-                                </TouchableOpacity>
+                            <View style={styles.userContainer}>
+                                <View style={styles.userPhotoContainer}>
+                                    {loading ? <LoadingComponent />
+                                        :
+                                        <Image
+                                            resizeMode={'cover'}
+                                            source={require('../../asset/image/user.png')}
+                                            style={[styles.userImg, APPEARANCES.SHADOW]} />}
+                                </View>
+                                <View style={styles.nameContainer}>
+                                    <TextInput
+                                        autoCorrect={false}
+                                        ref='name'
+                                        editable={this.state.isNameEdit}
+                                        style={styles.userName}
+                                        placeholder={user.displayName ? user.displayName : 'Me'}
+                                        placeholderTextColor={this.state.isNameEdit ? COLORS.BLUE : '#333'}
+                                        onChangeText={(value) => this.setState({ newName: value })}
+                                        onSubmitEditing={() => this.onSubmit()}
+                                    />
+                                    <TouchableOpacity
+                                        onPress={() => this.onEdit()}
+                                        style={styles.button}>
+                                        <Text style={[styles.detail, { color: COLORS.BLUE }]}>Edit</Text>
+                                        <Ionicons style={[styles.interestingIcon, { color: COLORS.BLUE, marginTop: DIMENSION(2), marginLeft: DIMENSION(1), fontSize: 13 }]} name={'md-create'} />
+                                    </TouchableOpacity>
+                                </View>
                             </View>
                             <View style={styles.detailsContainer}>
                                 <Text style={[styles.detail, { marginRight: DIMENSION(3) }]}>{user.email}</Text>
@@ -71,19 +87,55 @@ class MeScreen extends Component {
 
                             </View>
                         </View>
-                        <View style={styles.userPhotoContainer}>
-                            {loading ? <LoadingComponent />
-                                :
-                                <Image
-                                    resizeMode={'cover'}
-                                    source={require('../../asset/image/user.png')}
-                                    style={[styles.userImg, APPEARANCES.SHADOW]} />}
-                        </View>
-                        <TouchableOpacity
+                        <FlatList 
+                            style={styles.body}
+                            ItemSeparatorComponent = {() => this.renderItemSplitter()}
+                            keyExtractor={(item,index) => index.toString()}
+                            data={[1,2,3]}
+                            renderItem={({ item }) => {
+                                return(
+                                    <View style={[styles.card, APPEARANCES.SHADOW]}>
+                                    <View style={styles.cardHeader}>
+                                        <View>
+                                            <Text
+                                                style={styles.cardProgram} >GESL</Text>
+                                            <Text style={styles.cardInstitute}>English Program</Text>
+                                        </View>
+                                        <Image style={[{ width: DIMENSION(13), height: DIMENSION(13), borderRadius: 4 }]} source={require('../../asset/image/PUC_logo.png')} />
+                                    </View>
+                                    <View style={styles.cardBody}>
+                                        <Image style = {styles.cardBackground} source = {require('../../asset/image/receipt.png')} />
+                                        <View style={styles.descriptionContainer}>
+                                            <View>
+                                                <Text style={styles.label}>Student</Text>
+                                                <Text style={styles.description}>Sihak Chau</Text>
+                                            </View>
+                                            <View>
+                                                <Text style={styles.label}>Date</Text>
+                                                <Text style={styles.description}>14.07.2018</Text>
+                                            </View>
+                                        </View>
+                                        <View style={[styles.descriptionContainer, {marginTop:10}]}>
+                                            <View>
+                                                <Text style={styles.label}>Net Amount</Text>
+                                                <Text style={[styles.description,{color:COLORS.RED,fontWeight:'900'}]}>$2.5</Text>
+                                            </View>
+                                            <View>
+                                                <Text style={styles.label}>Expired Date</Text>
+                                                <Text style={styles.description}>21.07.2018</Text>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                                )
+                            }}
+                        />
+                      
+                        {/* <TouchableOpacity
                             onPress={() => this.props.user.userSignOut()}
                             style={[styles.buttonSignIn, APPEARANCES.SHADOW]}>
                             <Text style={styles.buttonSignInText}>Sign Out</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     :
                     <View style={styles.ifNoUserContainer} >
@@ -92,8 +144,8 @@ class MeScreen extends Component {
                             source={require('../../asset/image/NoUser.png')}
                             style={[styles.userImg, APPEARANCES.SHADOW]} />}
                          <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('LoginSignUp',{fromMe:true})}
-                            style={[styles.buttonSignIn, APPEARANCES.SHADOW,{backgroundColor:COLORS.MAIN}]}>
+                            onPress={() => this.props.navigation.navigate('LoginSignUp', { fromMe: true })}
+                            style={[styles.buttonSignIn, APPEARANCES.SHADOW, { backgroundColor: COLORS.MAIN }]}>
                             <Text style={styles.buttonSignInText}>Sign In</Text>
                         </TouchableOpacity>
                     </View>
@@ -104,8 +156,69 @@ class MeScreen extends Component {
     }
 }
 
-const imageWidthHeight = DIMENSION(55);
+const imageWidthHeight = DIMENSION(10);
 const styles = StyleSheet.create({
+
+    card: {
+        overflow: 'hidden',
+        width: DIMENSION(90),
+        height: DIMENSION(50),
+        backgroundColor: '#fff',
+        borderRadius: 12,
+    },
+
+
+    cardBackground:{
+        position: 'absolute',
+        width: DIMENSION(35),
+        height: DIMENSION(35),
+        right:15,
+        opacity: 0.3,
+
+    },
+
+    descriptionContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+
+    description: {
+        marginTop:2.5,
+        fontSize: 16,
+        fontWeight: '500',
+        color: '#333'
+    },
+
+    label: {
+        fontSize: 12,
+        fontWeight: '900',
+        color: '#rgba(0,0,0,0.8)'
+
+    },
+
+    cardInstitute: {
+        fontSize: 12,
+        fontWeight: '700',
+        color: '#rgba(0,0,0,0.5)'
+    },
+    cardProgram: {
+        fontSize: 18,
+        fontWeight: '900',
+        fontStyle: 'italic',
+        color: '#333'
+    },
+
+    cardBody: {
+        paddingHorizontal: 15,
+    },
+
+    cardHeader: {
+        padding: 15,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
 
     buttonSignIn: {
         width: DIMENSION(78),
@@ -128,9 +241,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
+    userContainer: {
+        flexDirection: 'row',
+    },
+
     container: {
         flex: 1,
-        backgroundColor: COLORS.BACKGROUND,
+        backgroundColor: '#f2f3f5',
+
     },
     closeIcon: {
         marginTop: DIMENSION(1),
@@ -151,7 +269,12 @@ const styles = StyleSheet.create({
         borderRadius: imageWidthHeight / 2,
     },
     nameContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
         flexDirection: 'row',
+        marginTop: DIMENSION(3.5),
+        marginLeft: 15,
+
     },
     header: {
         width: DIMENSION(100),
@@ -171,8 +294,8 @@ const styles = StyleSheet.create({
 
     body: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+        backgroundColor: '#f2f3f5',
+        paddingHorizontal: DIMENSION(5)
     },
     button: {
         marginLeft: 5,
@@ -182,14 +305,15 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     TopContainer: {
-        justifyContent: 'center',
-        alignItems: 'center',
         flex: 1,
         backgroundColor: '#fff'
     },
     sumDetailsContainer: {
-        justifyContent: 'center',
+        paddingVertical: DIMENSION(7),
+        paddingHorizontal: DIMENSION(5),
         alignItems: 'center',
+        backgroundColor: '#f2f3f5',
+
     },
     detailsContainer: {
         flexDirection: 'row',

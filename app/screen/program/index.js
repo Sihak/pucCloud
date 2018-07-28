@@ -1,7 +1,7 @@
 //import liraries
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, FlatList, ActivityIndicator } from 'react-native';
-import Ionicons from "react-native-vector-icons/Ionicons";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { COLORS, DIMENSION, APPEARANCES } from '../../module';
 import ProgramComponent from './program';
 import { observer, inject } from 'mobx-react';
@@ -21,23 +21,25 @@ class ProgramScreen extends Component {
         this.props.navigation.navigate(user ? 'Register' : 'LoginSignUp', { program: program })
     }
 
+
+
     render() {
-        
+
         const { programs, loading } = this.props.programs;
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.container}>
                     <View style={[styles.header]}>
                         <Text style={styles.headerTittle}> Programs </Text>
-                        <Ionicons style={styles.notificationIcon} name={'md-settings'} />
+                        <MaterialIcons style={styles.notificationIcon} name={'account-circle'} />
                     </View>
-                    <View style={styles.body}>
+                    <View style={[styles.body, loading && { justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }]}>
                         {
                             loading ? <LoadingComponent />
                                 :
                                 <FlatList
-                                    style={styles.programs}
                                     numColumns={2}
+                                    style={[styles.programs, APPEARANCES.SHADOW]}
                                     data={programs.slice()}
                                     keyExtractor={(item, index) => index.toString()}
                                     renderItem={({ index, item }) => {
@@ -58,10 +60,17 @@ class ProgramScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+    programs: {
+        flex: 1,
+        padding: 15,
+    },
 
     container: {
         flex: 1,
         backgroundColor: COLORS.BACKGROUND,
+        alignItems: 'center',
+        justifyContent: 'center',
+
     },
     header: {
         width: DIMENSION(100),
@@ -70,8 +79,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        borderBottomWidth: 0.2,
-        borderColor: '#333'
+        // borderBottomWidth: 0.2,
+        // borderColor: '#333'
     },
     headerTittle: {
         fontSize: 26,
@@ -86,8 +95,6 @@ const styles = StyleSheet.create({
 
     body: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
     },
 });
 export default ProgramScreen;

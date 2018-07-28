@@ -1,10 +1,11 @@
 //import liraries
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, Image, Alert, FlatList } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TextInput, TouchableOpacity, Image } from 'react-native';
 import { COLORS, DIMENSION, APPEARANCES } from '../../module'
 import { inject, observer } from 'mobx-react';
 import Ionicons from "react-native-vector-icons/Ionicons";
 import LoadingComponent from '../../component/loading';
+import GridMenu from './menu';
 
 @inject('user', 'register')
 @observer
@@ -38,12 +39,6 @@ class MeScreen extends Component {
         this.props.user.upDateDisplayName(this.state.newName)
     }
 
-    renderItemSplitter(){
-        return(
-            <View style = {{paddingVertical:DIMENSION(2)}}></View>
-        )
-    }
-
     render() {
         const { user, loading } = this.props.user;
         return (
@@ -58,7 +53,7 @@ class MeScreen extends Component {
                                         <Image
                                             resizeMode={'cover'}
                                             source={require('../../asset/image/user.png')}
-                                            style={[styles.userImg, APPEARANCES.SHADOW]} />}
+                                            style={[styles.userImg]} />}
                                 </View>
                                 <View style={styles.nameContainer}>
                                     <TextInput
@@ -87,55 +82,27 @@ class MeScreen extends Component {
 
                             </View>
                         </View>
-                        <FlatList 
-                            style={styles.body}
-                            ItemSeparatorComponent = {() => this.renderItemSplitter()}
-                            keyExtractor={(item,index) => index.toString()}
-                            data={[1,2,3]}
-                            renderItem={({ item }) => {
-                                return(
-                                    <View style={[styles.card, APPEARANCES.SHADOW]}>
-                                    <View style={styles.cardHeader}>
-                                        <View>
-                                            <Text
-                                                style={styles.cardProgram} >GESL</Text>
-                                            <Text style={styles.cardInstitute}>English Program</Text>
-                                        </View>
-                                        <Image style={[{ width: DIMENSION(13), height: DIMENSION(13), borderRadius: 4 }]} source={require('../../asset/image/PUC_logo.png')} />
-                                    </View>
-                                    <View style={styles.cardBody}>
-                                        <Image style = {styles.cardBackground} source = {require('../../asset/image/receipt.png')} />
-                                        <View style={styles.descriptionContainer}>
-                                            <View>
-                                                <Text style={styles.label}>Student</Text>
-                                                <Text style={styles.description}>Sihak Chau</Text>
-                                            </View>
-                                            <View>
-                                                <Text style={styles.label}>Date</Text>
-                                                <Text style={styles.description}>14.07.2018</Text>
-                                            </View>
-                                        </View>
-                                        <View style={[styles.descriptionContainer, {marginTop:10}]}>
-                                            <View>
-                                                <Text style={styles.label}>Net Amount</Text>
-                                                <Text style={[styles.description,{color:COLORS.RED,fontWeight:'900'}]}>$2.5</Text>
-                                            </View>
-                                            <View>
-                                                <Text style={styles.label}>Expired Date</Text>
-                                                <Text style={styles.description}>21.07.2018</Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </View>
-                                )
-                            }}
-                        />
-                      
-                        {/* <TouchableOpacity
-                            onPress={() => this.props.user.userSignOut()}
-                            style={[styles.buttonSignIn, APPEARANCES.SHADOW]}>
-                            <Text style={styles.buttonSignInText}>Sign Out</Text>
-                        </TouchableOpacity> */}
+                        <View style={styles.studyInfoContainer} >
+                            <View style={styles.studyInfo}>
+                                <Text style = {styles.studyInfoDetail}>3.63</Text>
+                                <Text style = {styles.studyInfoLabel}>GPA</Text>
+                            </View>
+                            <View style={styles.studyInfo}>
+                                <Text style = {styles.studyInfoDetail}>32</Text>
+                                <Text style = {styles.studyInfoLabel}>Subjects</Text>
+                            </View>
+                            <View style={styles.studyInfo}>
+                                <Text style = {styles.studyInfoDetail}>8</Text>
+                                <Text style = {styles.studyInfoLabel}>Subjects Left</Text>
+                            </View>
+                        </View>
+                        <GridMenu
+                        buttonPressed = {(value) => this.props.navigation.navigate(value)}
+                         />
+                        <View style = {styles.carouselContainer}>
+                            <Text style = {styles.carouselLabel}>Sugestion</Text>
+                        </View>
+                    
                     </View>
                     :
                     <View style={styles.ifNoUserContainer} >
@@ -156,69 +123,49 @@ class MeScreen extends Component {
     }
 }
 
-const imageWidthHeight = DIMENSION(10);
+const imageWidthHeight = DIMENSION(15);
 const styles = StyleSheet.create({
-
-    card: {
-        overflow: 'hidden',
-        width: DIMENSION(90),
-        height: DIMENSION(50),
-        backgroundColor: '#fff',
-        borderRadius: 12,
-    },
-
-
-    cardBackground:{
-        position: 'absolute',
-        width: DIMENSION(35),
-        height: DIMENSION(35),
-        right:15,
-        opacity: 0.3,
-
-    },
-
-    descriptionContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-
-    description: {
-        marginTop:2.5,
-        fontSize: 16,
-        fontWeight: '500',
+    carouselLabel:{
+        fontSize:22,
+        marginHorizontal:10,
+        fontWeight:'800',
         color: '#333'
     },
-
-    label: {
-        fontSize: 12,
-        fontWeight: '900',
-        color: '#rgba(0,0,0,0.8)'
-
+    carouselContainer :{
+        paddingVertical:15
     },
 
-    cardInstitute: {
-        fontSize: 12,
-        fontWeight: '700',
-        color: '#rgba(0,0,0,0.5)'
-    },
-    cardProgram: {
-        fontSize: 18,
-        fontWeight: '900',
-        fontStyle: 'italic',
-        color: '#333'
-    },
-
-    cardBody: {
-        paddingHorizontal: 15,
-    },
-
-    cardHeader: {
-        padding: 15,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+    GridMenu:{
+        justifyContent:'center',
         alignItems: 'center',
     },
+    studyInfoContainer:{
+        flexDirection: 'row',
+        borderColor: 'rgba(0,0,0,0.5)',
+        borderBottomWidth: 0.2,
+        borderTopWidth: 0.2,
+        justifyContent:'space-around'
+    },
+
+    studyInfo:{
+        marginVertical:10,
+        width:DIMENSION(25),
+        justifyContent:'center',
+        alignItems:  'center',
+    },
+
+    studyInfoDetail:{
+        color: COLORS.TEXT_DARK,
+        fontSize:27,
+        fontWeight:'400'
+    },
+
+    studyInfoLabel:{
+        color: 'rgba(0,0,0,0.4)',
+        fontSize:12,
+        fontWeight:'800'
+    },
+
 
     buttonSignIn: {
         width: DIMENSION(78),
@@ -247,7 +194,7 @@ const styles = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#f2f3f5',
+        backgroundColor: '#fff',
 
     },
     closeIcon: {
@@ -294,7 +241,7 @@ const styles = StyleSheet.create({
 
     body: {
         flex: 1,
-        backgroundColor: '#f2f3f5',
+        backgroundColor: '#fff',
         paddingHorizontal: DIMENSION(5)
     },
     button: {
@@ -306,13 +253,13 @@ const styles = StyleSheet.create({
     },
     TopContainer: {
         flex: 1,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
     },
     sumDetailsContainer: {
         paddingVertical: DIMENSION(7),
         paddingHorizontal: DIMENSION(5),
         alignItems: 'center',
-        backgroundColor: '#f2f3f5',
+        backgroundColor: '#fff',
 
     },
     detailsContainer: {

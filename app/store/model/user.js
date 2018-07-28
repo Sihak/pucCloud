@@ -4,7 +4,6 @@ import { auth } from '../../service/dataService/dataService';
 export default class User {
 
     constructor() {
-        // auth().signOut()
     }
 
     @observable user = null;

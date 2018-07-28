@@ -186,7 +186,7 @@ class LoginSignUp extends Component {
                                     <TouchableOpacity
                                         disabled={loading && true}
                                         onPress={() => this.onButton('signin')}
-                                        style={[styles.button]}>
+                                        style={styles.button}>
                                         <Text style={[styles.buttonText, this.state.type == 'signin' && { color: COLORS.MAIN }]}> Sign in </Text>
                                     </TouchableOpacity>
                                     <Text style={styles.split}>|</Text>
@@ -203,15 +203,6 @@ class LoginSignUp extends Component {
 
                                 }
                             </View>
-                            {
-                                this.state.type == 'signin' ?
-                                    <View style={styles.failContainer}>
-                                        <Text style={styles.failtText}> {this.errorHandler()} </Text>
-                                    </View>
-                                    : <View style={styles.failSignupContainer}>
-                                        <Text style={styles.failtText}> {this.errorHandler()} </Text>
-                                    </View>
-                            }
                         </View>
                     </View>
                 </SafeAreaView>
@@ -269,6 +260,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: DIMENSION(2),
+
     },
     closeIcon: {
         fontSize: 38,

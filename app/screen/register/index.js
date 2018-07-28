@@ -8,9 +8,8 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import ActionSheet from 'react-native-actionsheet'
 import moment from 'moment';
-
+import { validateEmail } from '../../store/utilities'
 import LoadingComponent from '../../component/loading';
-
 
 const options = [
     'Male',
@@ -26,18 +25,18 @@ class RegisterScreen extends Component {
             seletionDateType: null,
             isDateTimePickerVisible: false,
 
-            khmerName: null,
-            englishName: null,
+            nameKh: null,
+            nameEng: null,
             gender: null,
-            mobilePhone: null,
-            email: null,
-            date_of_birth: null,
+            mobile_phone: null,
+            email_address: null,
+            dob: null,
+
         }
     }
 
 
     componentDidMount() {
-
     }
 
     componentWillUnmount() {
@@ -50,10 +49,9 @@ class RegisterScreen extends Component {
     _hideDateTimePicker = () => this.setState({ isDateTimePickerVisible: false });
 
     _handleDatePicked = (date) => {
-        console.log(this.seletionDateType)
         if (this.state.seletionDateType == 'dob') {
             var convertedDate = moment(date).format('ll').toString()
-            this.setState({ date_of_birth: convertedDate })
+            this.setState({ dob: convertedDate })
             this.setState({ isDateTimePickerVisible: false })
         }
         else {
@@ -63,25 +61,34 @@ class RegisterScreen extends Component {
         }
     };
 
+    
 
-    async onNext() {
-        const { khmerName, englishName, gender, date_of_birth, mobilePhone, email } = this.state;
+    async onRegister() {
+        const { institute  } = this.props.navigation.state.params;
+        const { nameKh, nameEng, gender, dob, mobile_phone, email_address } = this.state;
         const { program } = this.props.navigation.state.params;
-        if (khmerName && englishName &&
-            gender && date_of_birth && mobilePhone && email) {
-            await this.props.register.register(khmerName, englishName, gender, date_of_birth, mobilePhone, email, program);
-            await this.props.navigation.navigate('Invoice')
+        if (nameKh && nameEng &&
+            gender && dob && mobile_phone.length >= 8 && email_address ) {
+                // await this.props.register.createTest(nameEng,nameKh,gender,dob,institute.shortName,email_address,mobile_phone,institute.id);
+                await this.props.navigation.navigate('Invoice')
         }
         else {
             Alert.alert(
-                'Empty',
-                'Please enter all required informations.',
+                'Informations Required',
+                'Please enter all required informations properly.',
                 [
                     { text: 'OK', onPress: () => console.log('OK Pressed') },
                 ],
                 { cancelable: false }
             )
         }
+    }
+
+
+    emailValidation(unValidatedEmail){
+        this.setState({
+            email_address:validateEmail(unValidatedEmail)
+        })
     }
 
 
@@ -93,7 +100,7 @@ class RegisterScreen extends Component {
     render() {
         const { user } = this.props.user;
         const { loading } = this.props.register;
-        const { gender, date_of_birth } = this.state;
+        const { gender, dob } = this.state;
         const { institute, program } = this.props.navigation.state.params;
         return (
             <KeyboardAwareScrollView style={[styles.container]}>
@@ -120,7 +127,7 @@ class RegisterScreen extends Component {
                                 <TextInput
                                     editable={loading ? false : true}
                                     style={[styles.textBox]}
-                                    onChangeText={(value) => this.setState({ khmerName: value })}
+                                    onChangeText={(value) => this.setState({ nameKh: value })}
                                     autoCorrect={false}
                                     autoCapitalize={'none'}
                                     placeholder={'your khmer name'}
@@ -131,7 +138,7 @@ class RegisterScreen extends Component {
                                 <TextInput
                                     editable={loading ? false : true}
                                     style={[styles.textBox]}
-                                    onChangeText={(value) => this.setState({ englishName: value })}
+                                    onChangeText={(value) => this.setState({ nameEng: value })}
                                     autoCorrect={false}
                                     autoCapitalize={'none'}
                                     placeholder={'your english name'}
@@ -148,17 +155,18 @@ class RegisterScreen extends Component {
                                 onPress={() => this._showDateTimePicker('dob')}
                                 style={styles.textInput} >
                                 <Text style={styles.label}>Birthday</Text>
-                                <Text style={[styles.textInPicker, date_of_birth && { color: COLORS.TEXT_DARK }]}>{date_of_birth ? date_of_birth : 'select date of birth'}</Text>
+                                <Text style={[styles.textInPicker, dob && { color: COLORS.TEXT_DARK }]}>{dob ? dob : 'select date of birth'}</Text>
                             </TouchableOpacity>
                             <View style={styles.textInput}>
                                 <Text style={styles.label}>Mobile Phone</Text>
                                 <TextInput
                                     editable={loading ? false : true}
                                     style={[styles.textBox]}
-                                    onChangeText={(value) => this.setState({ mobilePhone: value })}
+                                    onChangeText={(value) => this.setState({ mobile_phone: value })}
                                     autoCorrect={false}
                                     autoCapitalize={'none'}
                                     placeholder={'your mobile phone'}
+                                    keyboardType = {'phone-pad'}
                                 />
                             </View>
                             <View style={styles.textInput}>
@@ -166,10 +174,12 @@ class RegisterScreen extends Component {
                                 <TextInput
                                     editable={loading ? false : true}
                                     style={[styles.textBox]}
-                                    onChangeText={(value) => this.setState({ email: value })}
+                                    onChangeText={(value) => this.emailValidation( value )}
                                     autoCorrect={false}
                                     autoCapitalize={'none'}
                                     placeholder={'your email'}
+                                    keyboardType = {'email-address'}
+
                                 />
                             </View>
 
@@ -178,7 +188,7 @@ class RegisterScreen extends Component {
                                     :
                                     <TouchableOpacity
                                         disabled={!user && true}
-                                        onPress={() => this.onNext()}
+                                        onPress={() => this.onRegister()}
                                         style={[styles.buttonNext, !user && { backgroundColor: 'rgba(0,0,0,.5)' }]}>
                                         <Text style={styles.textButton}>Register</Text>
                                     </TouchableOpacity>

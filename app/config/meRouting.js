@@ -1,22 +1,79 @@
 import { createStackNavigator } from 'react-navigation';
 import LoginSignUp from '../screen/loginSignUp';
 import MeScreen from '../screen/me';
-export default MeRouting = createStackNavigator({
+import PaymentScreen from '../screen/me/paymentScreen';
+import InvoiceScreen from '../screen/payment';
+import ConfirmPayment from '../screen/payment/confirmPayment';
 
-    MeScreen:{
-        screen: MeScreen,
-        navigationOptions:{
-            gesturesEnabled : false
+const OnPayment = createStackNavigator({
+    Payment: {
+        screen: PaymentScreen,
+        navigationOptions: {
+            gesturesEnabled: true
         }
     },
-
-    LoginSignUp:{
-        screen: LoginSignUp,
-        navigationOptions:{
-            gesturesEnabled : false
+    Invoice: {
+        screen: InvoiceScreen,
+        navigationOptions: {
+            gesturesEnabled: true
+        }
+    },
+    ConfirmPayment: {
+        screen: ConfirmPayment,
+        navigationOptions: {
+            gesturesEnabled: true
         }
     },
 }, {
         headerMode: 'none',
-        mode: 'card'
+        mode: 'modal',
+
+    });
+
+
+const ClassRoute = createStackNavigator({
+    Class: {
+        screen: PaymentScreen,
+        navigationOptions: {
+            gesturesEnabled: true
+        }
+    },
+}, {
+        headerMode: 'none',
+
+    });
+
+export default MeRouting = createStackNavigator({
+
+    MeScreen: {
+        screen: MeScreen,
+        navigationOptions: {
+            gesturesEnabled: false
+        }
+    },
+
+    Payment: {
+        screen: OnPayment,
+        navigationOptions: {
+            gesturesEnabled: true
+        }
+    },
+
+    LoginSignUp: {
+        screen: LoginSignUp,
+        navigationOptions: {
+            gesturesEnabled: false,
+        }
+    },
+    Class: {
+        screen: ClassRoute,
+        navigationOptions: {
+            gesturesEnabled: false,
+        }
+    },
+}, {
+        headerMode: 'none',
+        
     })
+
+

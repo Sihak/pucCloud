@@ -61,7 +61,7 @@ class ConfirmPayment extends Component {
                         <Text style={styles.headerTittle}>Pay Invoice</Text>
                         <TouchableOpacity
                             onPress={() => this.onDone()}>
-                            <Ionicons style={styles.closeIcon} name={'md-close'} />
+                            <Ionicons style={styles.closeIcon} name={'md-arrow-back'} />
                         </TouchableOpacity>
                     </View>
                     <Text style={styles.guide}>Please enter your information to confirm payment.</Text>
@@ -69,17 +69,6 @@ class ConfirmPayment extends Component {
                         <Image style={styles.logo} source={require('../../asset/image/wing.png')} />
                     </View>
                     <View style={styles.body}>
-                        <View style={styles.textInput}>
-                            <Text style={styles.label}>Full Name</Text>
-                            <TextInput
-                                editable={loading ? false : true}
-                                style={[styles.textBox]}
-                                onChangeText={(value) => this.setState({ khmerName: value })}
-                                autoCorrect={false}
-                                autoCapitalize={'none'}
-                                placeholder={'your full name'}
-                            />
-                        </View>
                         <View style={styles.textInput}>
                             <Text style={styles.label}>Account Code</Text>
                             <TextInput

@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     logo: {
         width: DIMENSION(40),
         height: DIMENSION(40),
-        marginBottom: DIMENSION(5)
+        marginBottom: DIMENSION(5),
     },
  
 });

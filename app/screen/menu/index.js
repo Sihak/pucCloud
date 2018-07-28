@@ -15,15 +15,8 @@ class MenuScreen extends Component {
         }
     }
 
-
-    componentDidMount() {
-     
-    }
-
-    componentWillUnmount() {
-    }
-
     render() {
+        const { user } = this.props.user;
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.loadingHandler}></View>
@@ -32,7 +25,30 @@ class MenuScreen extends Component {
                         <Text style={styles.headerTittle}>Menu</Text>
                     </View>
                     <View style={styles.body}>
-                       
+                    <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => this.props.user.userSignOut()}>
+                            <Ionicons style={styles.buttonIcon} name={'md-people'} />
+                            <Text style  = {styles.buttonText}>About Us</Text>
+                        </TouchableOpacity>
+                    <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => this.props.user.userSignOut()}>
+                            <Ionicons style={styles.buttonIcon} name={'md-settings'} />
+                            <Text style  = {styles.buttonText}>Setting</Text>
+                        </TouchableOpacity>
+                      {
+                          user&&
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => this.props.user.userSignOut()}>
+                            <Ionicons style={styles.buttonIcon} name={'md-close'} />
+                            <Text style  = {styles.buttonText}>Log out</Text>
+                        </TouchableOpacity>
+                      }  
+                    </View>
+                    <View style = {styles.versionContainer}>
+                        <Text>Version: 1.0.0</Text>
                     </View>
                 </View>
             </SafeAreaView>
@@ -69,9 +85,32 @@ const styles = StyleSheet.create({
 
     body: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
     },
+    button:{
+        paddingVertical: DIMENSION(1),
+        paddingHorizontal: DIMENSION(5.5),
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor:'#fff',
+        marginBottom: 5,
+        borderBottomWidth: 0.2,
+        borderColor: 'rgba(0,0,0,0.5)',
+    },
+    buttonIcon:{
+        fontSize:28,
+        marginRight:DIMENSION(2),
+        color: COLORS.TEXT_DARK
+    },
+    buttonText:{
+        color: COLORS.TEXT_DARK,
+        fontSize:18,
+        fontWeight: '300',
+    },
+    versionContainer:{
+        flex:1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    }
 
 });
 

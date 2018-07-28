@@ -46,7 +46,7 @@ class ListPrograms extends Component {
                             <Ionicons style={styles.closeIcon} name={'md-close'} />
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.guide}>Please enter your information.</Text>
+                    <Text style={styles.guide}>Please select your test type.</Text>
                     <View style={[styles.body, loading && { justifyContent: 'center', alignItems: 'center' }]}>
                         {loading ? <LoadingComponent />
                             :

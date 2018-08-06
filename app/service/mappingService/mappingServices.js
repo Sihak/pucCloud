@@ -8,3 +8,7 @@ export function pushToArray(docs) {
     })
     return data;
   }
+
+  export function pushToObject(doc){
+    return {...doc.data()}
+  }
